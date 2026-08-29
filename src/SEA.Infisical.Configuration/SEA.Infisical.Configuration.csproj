@@ -15,6 +15,9 @@
     <Title>InfisicalSecretsConfiguration</Title>
     <Authors>SEA.Infisical.Configuration</Authors>
     <Copyright>SEA</Copyright>
+    <Version>1.0.2</Version>
+    <PackageProjectUrl>https://github.com/Shulyakovskiy/SEA.Infisical.Configuration</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Shulyakovskiy/SEA.Infisical.Configuration</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
