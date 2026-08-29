@@ -66,4 +66,4 @@ jobs:
           PACKAGE_VERSION: ${{ steps.version.outputs.value }}
         run: >-
           dotnet nuget push "artifacts/nuget/SEA.Infisical.Configuration.${PACKAGE_VERSION}.nupkg"
-          --api-key "$NUGET_TEMPORARY_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
+          --api-key "$NUGET_TEMPORARY_API_KEY" --source https://api.nuget.org/v3/index.json
