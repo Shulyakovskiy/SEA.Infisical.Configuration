@@ -64,9 +64,3 @@ INFISICAL_REFRESH_INTERVAL_SECONDS=43200
 
 Обновление вызывает `IConfigurationRoot.Reload`. `IOptionsMonitor<T>` увидит новые значения, а уже созданный `IOptions<T>` остаётся снимком, как и в стандартной модели ASP.NET Core.
 
-## Сборка и упаковка библиотеки
-
-```bash
-dotnet build src/Infisical.Configuration/Infisical.Configuration.csproj
-dotnet pack src/Infisical.Configuration/Infisical.Configuration.csproj -c Release
-```
