@@ -2,7 +2,7 @@ using Infisical.Sdk;
 using Infisical.Sdk.Model;
 using Microsoft.Extensions.Configuration;
 
-namespace SEA.Infisical.Configuration;
+namespace MonixOne.Infisical.Configuration;
 
 /// <summary>
 /// Fetches Infisical secrets and exposes them as a normal configuration source.

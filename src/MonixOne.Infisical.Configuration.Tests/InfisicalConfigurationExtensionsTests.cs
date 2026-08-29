@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
 
-namespace SEA.Infisical.Configuration.Tests;
+namespace MonixOne.Infisical.Configuration.Tests;
 
 public sealed class InfisicalConfigurationExtensionsTests
 {

@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace SEA.Infisical.Configuration;
+namespace MonixOne.Infisical.Configuration;
 
 /// <summary>
 /// Settings for loading Infisical secrets into ASP.NET Core configuration and

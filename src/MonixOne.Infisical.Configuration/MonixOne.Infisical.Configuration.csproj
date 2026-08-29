@@ -4,17 +4,16 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PackageId>SEA.Infisical.Configuration</PackageId>
+    <PackageId>MonixOne.Infisical.Configuration</PackageId>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>ASP.NET Core configuration provider that loads Infisical secrets into IConfiguration and the process environment.</Description>
     <PackageTags>infisical;configuration;aspnetcore;secrets</PackageTags>
-    <AssemblyName>SEA.Infisical.Configuration</AssemblyName>
-    <RootNamespace>SEA.Infisical.Configuration</RootNamespace>
     <LangVersion>14</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Title>InfisicalSecretsConfiguration</Title>
-    <Authors>SEA.Infisical.Configuration</Authors>
-    <Copyright>SEA</Copyright>
+    <Authors>Shulyakovsky.E</Authors>
+    <Copyright>MonixOne</Copyright>
+    <Version>1.0.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +26,10 @@
 
   <ItemGroup>
     <None Include="../../README.md" Link="README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="artifacts\nuget\" />
   </ItemGroup>
 
 </Project>

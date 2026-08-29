@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SEA.Infisical.Configuration;
+namespace MonixOne.Infisical.Configuration;
 
 public static class InfisicalConfigurationExtensions
 {

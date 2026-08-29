@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace SEA.Infisical.Configuration;
+namespace MonixOne.Infisical.Configuration;
 
 internal sealed class InfisicalConfigurationRefreshService(
    InfisicalConfigurationProvider provider,

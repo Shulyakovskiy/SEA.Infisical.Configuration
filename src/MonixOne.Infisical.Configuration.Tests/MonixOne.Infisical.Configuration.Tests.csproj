@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../SEA.Infisical.Configuration/SEA.Infisical.Configuration.csproj" />
+    <ProjectReference Include="..\MonixOne.Infisical.Configuration\MonixOne.Infisical.Configuration.csproj" />
   </ItemGroup>
 
 </Project>

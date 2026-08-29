@@ -1,8 +1,6 @@
 # Infisical configuration for ASP.NET Core
 
-В репозитории два проекта:
-
-- `SEA.Infisical.Configuration` — переиспользуемая библиотека для .NET 9/10;
+- `MonixOne.Infisical.Configuration` — переиспользуемая библиотека для .NET 9/10;
 
 Библиотека один раз загружает секреты из Infisical во время старта приложения и:
 
