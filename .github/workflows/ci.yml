@@ -26,10 +26,10 @@ jobs:
 
       - name: Build
         run: >-
-          dotnet build SEA.Infisical.Configuration.sln --configuration Release --no-restore
+          dotnet build MonixOne.Infisical.Configuration.sln --configuration Release --no-restore
           --disable-build-servers -m:1 -p:GeneratePackageOnBuild=false
 
       - name: Test
         run: >-
-          dotnet test SEA.Infisical.Configuration.sln --configuration Release --no-build --no-restore
+          dotnet test MonixOne.Infisical.Configuration.sln --configuration Release --no-build --no-restore
           --disable-build-servers -m:1

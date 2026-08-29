@@ -36,21 +36,21 @@ jobs:
           echo "value=$package_version" >> "$GITHUB_OUTPUT"
 
       - name: Restore
-        run: dotnet restore SEA.Infisical.Configuration.sln --disable-parallel
+        run: dotnet restore MonixOne.Infisical.Configuration.sln --disable-parallel
 
       - name: Build
         run: >-
-          dotnet build SEA.Infisical.Configuration.sln --configuration Release --no-restore
+          dotnet build MonixOne.Infisical.Configuration.sln --configuration Release --no-restore
           --disable-build-servers -m:1 -p:GeneratePackageOnBuild=false
 
       - name: Test
         run: >-
-          dotnet test SEA.Infisical.Configuration.sln --configuration Release --no-build --no-restore
+          dotnet test MonixOne.Infisical.Configuration.sln --configuration Release --no-build --no-restore
           --disable-build-servers -m:1
 
       - name: Pack
         run: >-
-          dotnet pack src/SEA.Infisical.Configuration/SEA.Infisical.Configuration.csproj
+          dotnet pack src/MonixOne.Infisical.Configuration/MonixOne.Infisical.Configuration.csproj
           --configuration Release --no-build --output artifacts/nuget
           -p:GeneratePackageOnBuild=false -p:PackageVersion=${{ steps.version.outputs.value }}
 
@@ -65,5 +65,5 @@ jobs:
           NUGET_TEMPORARY_API_KEY: ${{ steps.nuget_login.outputs.NUGET_API_KEY }}
           PACKAGE_VERSION: ${{ steps.version.outputs.value }}
         run: >-
-          dotnet nuget push "artifacts/nuget/SEA.Infisical.Configuration.${PACKAGE_VERSION}.nupkg"
+          dotnet nuget push "artifacts/nuget/MonixOne.Infisical.Configuration.${PACKAGE_VERSION}.nupkg"
           --api-key "$NUGET_TEMPORARY_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
