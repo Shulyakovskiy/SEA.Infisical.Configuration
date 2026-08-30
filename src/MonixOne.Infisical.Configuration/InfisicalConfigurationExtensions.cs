@@ -16,6 +16,12 @@ public static class InfisicalConfigurationExtensions
     {
         var options = new InfisicalConfigurationOptions();
         configure?.Invoke(options);
+
+        if (!options.Enabled)
+        {
+            return services;
+        }
+
         options.ApplyEnvironmentDefaults();
         options.Validate();
 

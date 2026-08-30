@@ -8,6 +8,13 @@ namespace MonixOne.Infisical.Configuration;
 /// </summary>
 public sealed class InfisicalConfigurationOptions
 {
+    /// <summary>
+    /// Enables loading Infisical secrets and registering background refresh.
+    /// When disabled, AddInfisical does not validate Infisical settings or
+    /// change application configuration.
+    /// </summary>
+    public bool Enabled { get; set; } = true;
+
     public string ClientId { get; set; } = string.Empty;
 
     public string ClientSecret { get; set; } = string.Empty;

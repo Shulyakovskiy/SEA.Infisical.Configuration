@@ -14,6 +14,36 @@ public sealed class InfisicalConfigurationExtensionsTests
     private const string RefreshIntervalVariable = "SEA_INFISICAL_TEST_REFRESH_INTERVAL_SECONDS";
 
     [Fact]
+    public void AddInfisical_Disabled_DoesNotValidateOrChangeConfiguration()
+    {
+        // Arrange
+        using var environment = new EnvironmentVariableScope(
+            (ClientIdVariable, null),
+            (ClientSecretVariable, null),
+            (ProjectIdVariable, null),
+            (EnvironmentVariable, null),
+            (RefreshIntervalVariable, "0"));
+        var services = new ServiceCollection();
+        var configuration = new ConfigurationManager();
+        configuration["Application:ExistingSetting"] = "preserved";
+        var initialSourceCount = configuration.Sources.Count;
+        var initialServiceCount = services.Count;
+
+        // Act
+        var returnedServices = services.AddInfisical(configuration, options =>
+        {
+            options.Enabled = false;
+            ConfigureEnvironmentVariableNames(options);
+        });
+
+        // Assert
+        returnedServices.ShouldBeSameAs(services);
+        configuration.Sources.Count.ShouldBe(initialSourceCount);
+        services.Count.ShouldBe(initialServiceCount);
+        configuration["Application:ExistingSetting"].ShouldBe("preserved");
+    }
+
+    [Fact]
     public void AddInfisical_MissingRequiredSettings_ThrowsBeforeAddingProvider()
     {
         // Arrange

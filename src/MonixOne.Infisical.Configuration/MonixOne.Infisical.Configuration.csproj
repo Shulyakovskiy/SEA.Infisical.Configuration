@@ -5,15 +5,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>MonixOne.Infisical.Configuration</PackageId>
+    <PackageIcon>nuget-icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>ASP.NET Core configuration provider that loads Infisical secrets into IConfiguration and the process environment.</Description>
     <PackageTags>infisical;configuration;aspnetcore;secrets</PackageTags>
     <LangVersion>14</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Title>InfisicalSecretsConfiguration</Title>
+    <Title>MonixOne.Infisical.Configuration</Title>
     <Authors>Shulyakovsky.E</Authors>
     <Copyright>MonixOne</Copyright>
-    <Version>1.0.4</Version>
+    <Version>1.1.0</Version>
+    <PackageProjectUrl>https://github.com/Shulyakovskiy/SEA.Infisical.Configuration</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Shulyakovskiy/SEA.Infisical.Configuration</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="../../assets/nuget-icon.png" Link="nuget-icon.png" Pack="true" PackagePath="/" />
     <None Include="../../README.md" Link="README.md" Pack="true" PackagePath="/" />
   </ItemGroup>
 
