@@ -2,9 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{75AC9CE9-1180-4EA9-8028-19D1CD7B6D8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEA.Infisical.Configuration", "src\SEA.Infisical.Configuration\SEA.Infisical.Configuration.csproj", "{0970D965-5962-4AA7-B939-4F99F744370C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonixOne.Infisical.Configuration", "src\MonixOne.Infisical.Configuration\MonixOne.Infisical.Configuration.csproj", "{0970D965-5962-4AA7-B939-4F99F744370C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEA.Infisical.Configuration.Tests", "src\SEA.Infisical.Configuration.Tests\SEA.Infisical.Configuration.Tests.csproj", "{AD9296F3-93EF-4E5D-8597-A1C89D3F2927}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonixOne.Infisical.Configuration.Tests", "src\MonixOne.Infisical.Configuration.Tests\MonixOne.Infisical.Configuration.Tests.csproj", "{AD9296F3-93EF-4E5D-8597-A1C89D3F2927}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{97D972F2-E89B-4566-97C2-601A02313F38}"
 	ProjectSection(SolutionItems) = preProject

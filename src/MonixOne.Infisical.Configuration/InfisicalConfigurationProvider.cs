@@ -2,34 +2,24 @@ using Infisical.Sdk;
 using Infisical.Sdk.Model;
 using Microsoft.Extensions.Configuration;
 
-namespace SEA.Infisical.Configuration;
+namespace MonixOne.Infisical.Configuration;
 
 /// <summary>
 /// Fetches Infisical secrets and exposes them as a normal configuration source.
 /// Keys containing double underscores are normalized to ':' for options binding.
 /// </summary>
-public sealed class InfisicalConfigurationProvider : ConfigurationProvider, IDisposable
+public sealed class InfisicalConfigurationProvider(InfisicalConfigurationOptions options)
+    : ConfigurationProvider, IDisposable
 {
-    private readonly InfisicalConfigurationOptions _options;
-    private readonly InfisicalClient _client;
+    private readonly InfisicalClient _client = CreateClient(options.Url);
     private readonly SemaphoreSlim _refreshLock = new(1, 1);
-    private IReadOnlyDictionary<string, string> _secrets =
-        new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-    public InfisicalConfigurationProvider(InfisicalConfigurationOptions options)
-    {
-        _options = options;
-        _client = CreateClient(options.Url);
-    }
-
-    public IReadOnlyDictionary<string, string> Secrets => _secrets;
 
     public override void Load()
     {
         RefreshAsync(CancellationToken.None).GetAwaiter().GetResult();
     }
 
-    public async Task<IReadOnlyDictionary<string, string>> RefreshAsync(
+    internal async Task RefreshAsync(
         CancellationToken cancellationToken = default)
     {
         await _refreshLock.WaitAsync(cancellationToken);
@@ -39,21 +29,21 @@ public sealed class InfisicalConfigurationProvider : ConfigurationProvider, IDis
             // A new login is performed for every refresh so that a rarely used
             // service never depends on a short-lived token kept in memory.
             await _client.Auth().UniversalAuth().LoginAsync(
-                _options.ClientId,
-                _options.ClientSecret);
+                options.ClientId,
+                options.ClientSecret);
 
             var secrets = await _client.Secrets().ListAsync(new ListSecretsOptions
             {
-                ProjectId = _options.ProjectId,
-                EnvironmentSlug = _options.EnvironmentSlug,
-                SecretPath = _options.SecretPath,
-                Recursive = _options.Recursive,
-                ExpandSecretReferences = _options.ExpandSecretReferences,
+                ProjectId = options.ProjectId,
+                EnvironmentSlug = options.EnvironmentSlug,
+                SecretPath = options.SecretPath,
+                Recursive = options.Recursive,
+                ExpandSecretReferences = options.ExpandSecretReferences,
                 SetSecretsAsEnvironmentVariables = false,
                 ViewSecretValue = true
             });
 
-            if (secrets is null)
+            if (secrets is null || !secrets.Any())
             {
                 throw new InvalidOperationException("Infisical returned an empty response.");
             }
@@ -64,7 +54,7 @@ public sealed class InfisicalConfigurationProvider : ConfigurationProvider, IDis
             foreach (var secret in secrets)
             {
                 var configurationKey = NormalizeConfigurationKey(secret.SecretKey);
-                var secretValue = secret.SecretValue ?? string.Empty;
+                var secretValue = secret.SecretValue;
 
                 if (!configurationData.TryAdd(configurationKey, secretValue))
                 {
@@ -76,7 +66,7 @@ public sealed class InfisicalConfigurationProvider : ConfigurationProvider, IDis
                 processEnvironmentData[secret.SecretKey] = secretValue;
             }
 
-            if (_options.SetProcessEnvironment)
+            if (options.SetProcessEnvironment)
             {
                 foreach (var (key, value) in processEnvironmentData)
                 {
@@ -87,11 +77,10 @@ public sealed class InfisicalConfigurationProvider : ConfigurationProvider, IDis
                 }
             }
 
+            // Replace the active configuration only after the complete response
+            // has been validated. Any failure above leaves the last known values intact.
             Data = configurationData;
-            _secrets = processEnvironmentData;
             OnReload();
-
-            return _secrets;
         }
         finally
         {

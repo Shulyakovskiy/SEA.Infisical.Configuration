@@ -22,14 +22,14 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Restore
-        run: dotnet restore SEA.Infisical.Configuration.sln --disable-parallel
+        run: dotnet restore MonixOne.Infisical.Configuration.sln --disable-parallel
 
       - name: Build
         run: >-
-          dotnet build SEA.Infisical.Configuration.sln --configuration Release --no-restore
+          dotnet build MonixOne.Infisical.Configuration.sln --configuration Release --no-restore
           --disable-build-servers -m:1 -p:GeneratePackageOnBuild=false
 
       - name: Test
         run: >-
-          dotnet test SEA.Infisical.Configuration.sln --configuration Release --no-build --no-restore
+          dotnet test MonixOne.Infisical.Configuration.sln --configuration Release --no-build --no-restore
           --disable-build-servers -m:1

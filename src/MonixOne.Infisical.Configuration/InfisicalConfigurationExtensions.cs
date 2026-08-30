@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SEA.Infisical.Configuration;
+namespace MonixOne.Infisical.Configuration;
 
 public static class InfisicalConfigurationExtensions
 {
@@ -16,6 +16,12 @@ public static class InfisicalConfigurationExtensions
     {
         var options = new InfisicalConfigurationOptions();
         configure?.Invoke(options);
+
+        if (!options.Enabled)
+        {
+            return services;
+        }
+
         options.ApplyEnvironmentDefaults();
         options.Validate();
 

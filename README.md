@@ -1,8 +1,6 @@
 # Infisical configuration for ASP.NET Core
 
-В репозитории два проекта:
-
-- `SEA.Infisical.Configuration` — переиспользуемая библиотека для .NET 9/10;
+- `MonixOne.Infisical.Configuration` — переиспользуемая библиотека для .NET 9/10;
 
 Библиотека один раз загружает секреты из Infisical во время старта приложения и:
 
@@ -24,6 +22,14 @@ public sealed class SomeService(IOptions<DemoOptions> options)
 ```
 
 `AddInfisical` нужно вызвать до `Configure<T>`, `BindConfiguration` и других регистраций, которые читают секретные настройки.
+
+Чтобы полностью отключить библиотеку для конкретного запуска, передайте `Enabled = false` при подключении:
+
+```csharp
+builder.Services.AddInfisical(builder.Configuration, options => options.Enabled = false);
+```
+
+В этом режиме библиотека не читает переменные `INFISICAL_*`, не валидирует credentials, не обращается к Infisical, не добавляет provider в `IConfiguration` и не регистрирует background refresh.
 
 ## Доступ Infisical
 
@@ -64,3 +70,4 @@ INFISICAL_REFRESH_INTERVAL_SECONDS=43200
 
 Обновление вызывает `IConfigurationRoot.Reload`. `IOptionsMonitor<T>` увидит новые значения, а уже созданный `IOptions<T>` остаётся снимком, как и в стандартной модели ASP.NET Core.
 
+Если Infisical вернул ошибку, отмену или пустой список секретов, обновление считается неуспешным: библиотека сохраняет последнее успешно загруженное значение конфигурации и повторит попытку на следующем интервале.
