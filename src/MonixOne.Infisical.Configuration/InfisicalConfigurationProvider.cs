@@ -45,7 +45,7 @@ public sealed class InfisicalConfigurationProvider(InfisicalConfigurationOptions
 
             if (secrets is null || !secrets.Any())
             {
-                throw new InvalidOperationException("Infisical returned an empty response.");
+                return;
             }
 
             var configurationData = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase);
