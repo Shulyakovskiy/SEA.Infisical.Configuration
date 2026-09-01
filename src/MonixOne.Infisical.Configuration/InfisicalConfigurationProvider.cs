@@ -43,7 +43,7 @@ public sealed class InfisicalConfigurationProvider(InfisicalConfigurationOptions
                 ViewSecretValue = true
             });
 
-            if (secrets is null || !secrets.Any())
+            if (!secrets.Any())
             {
                 return;
             }
