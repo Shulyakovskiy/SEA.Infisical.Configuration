@@ -8,6 +8,8 @@ namespace MonixOne.Infisical.Configuration;
 /// </summary>
 public sealed class InfisicalConfigurationOptions
 {
+    public const string ConfigurationSectionName = "Infisical";
+
     /// <summary>
     /// Enables loading Infisical secrets and registering background refresh.
     /// When disabled, AddInfisical does not validate Infisical settings or
@@ -41,6 +43,12 @@ public sealed class InfisicalConfigurationOptions
     /// </summary>
     public TimeSpan RefreshInterval { get; set; } = TimeSpan.FromDays(1);
 
+    /// <summary>
+    /// Refresh interval in seconds for binding from the <c>Infisical</c>
+    /// configuration section.
+    /// </summary>
+    public long? RefreshIntervalSeconds { get; set; }
+
     public string ClientIdEnvironmentVariable { get; set; } = "INFISICAL_CLIENT_ID";
 
     public string ClientSecretEnvironmentVariable { get; set; } = "INFISICAL_CLIENT_SECRET";
@@ -72,21 +80,35 @@ public sealed class InfisicalConfigurationOptions
             Recursive = recursive;
         }
 
-        var refreshIntervalSeconds = Environment.GetEnvironmentVariable(
-            RefreshIntervalSecondsEnvironmentVariable);
-
-        if (!string.IsNullOrWhiteSpace(refreshIntervalSeconds))
+        if (RefreshIntervalSeconds is null)
         {
-            if (!long.TryParse(
-                    refreshIntervalSeconds,
-                    NumberStyles.None,
-                    CultureInfo.InvariantCulture,
-                    out var seconds)
-                || seconds <= 0
-                || seconds > (long)TimeSpan.MaxValue.TotalSeconds)
+            var refreshIntervalSeconds = Environment.GetEnvironmentVariable(
+                RefreshIntervalSecondsEnvironmentVariable);
+
+            if (!string.IsNullOrWhiteSpace(refreshIntervalSeconds))
+            {
+                if (!long.TryParse(
+                        refreshIntervalSeconds,
+                        NumberStyles.None,
+                        CultureInfo.InvariantCulture,
+                        out var environmentSeconds)
+                    || environmentSeconds <= 0
+                    || environmentSeconds > (long)TimeSpan.MaxValue.TotalSeconds)
+                {
+                    throw new InvalidOperationException(
+                        $"{RefreshIntervalSecondsEnvironmentVariable} must be a positive integer number of seconds.");
+                }
+
+                RefreshIntervalSeconds = environmentSeconds;
+            }
+        }
+
+        if (RefreshIntervalSeconds is { } seconds)
+        {
+            if (seconds <= 0 || seconds > (long)TimeSpan.MaxValue.TotalSeconds)
             {
                 throw new InvalidOperationException(
-                    $"{RefreshIntervalSecondsEnvironmentVariable} must be a positive integer number of seconds.");
+                    $"{ConfigurationSectionName}:RefreshIntervalSeconds must be a positive integer number of seconds.");
             }
 
             RefreshInterval = TimeSpan.FromSeconds(seconds);

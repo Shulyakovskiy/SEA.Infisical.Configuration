@@ -12,6 +12,63 @@ public sealed class InfisicalConfigurationExtensionsTests
     private const string ProjectIdVariable = "SEA_INFISICAL_TEST_PROJECT_ID";
     private const string EnvironmentVariable = "SEA_INFISICAL_TEST_ENVIRONMENT";
     private const string RefreshIntervalVariable = "SEA_INFISICAL_TEST_REFRESH_INTERVAL_SECONDS";
+    private const string RecursiveVariable = "INFISICAL_RECURSIVE";
+
+    [Fact]
+    public void CreateOptions_ConfigurationSection_BindsInfisicalSettings()
+    {
+        // Arrange
+        using var environment = new EnvironmentVariableScope((RecursiveVariable, null));
+        var configuration = new ConfigurationManager
+        {
+            ["Infisical:ClientId"] = "machine-identity-client-id",
+            ["Infisical:ClientSecret"] = "machine-identity-client-secret",
+            ["Infisical:ProjectId"] = "project-id",
+            ["Infisical:EnvironmentSlug"] = "dev",
+            ["Infisical:SecretPath"] = "/",
+            ["Infisical:RefreshIntervalSeconds"] = "86400",
+            ["Infisical:Url"] = "http://infisical01.infra.home.arpa:8888",
+            ["Infisical:Recursive"] = "false"
+        };
+
+        // Act
+        var options = InfisicalConfigurationExtensions.CreateOptions(configuration);
+        options.ApplyEnvironmentDefaults();
+        options.Validate();
+
+        // Assert
+        options.ClientId.ShouldBe("machine-identity-client-id");
+        options.ClientSecret.ShouldBe("machine-identity-client-secret");
+        options.ProjectId.ShouldBe("project-id");
+        options.EnvironmentSlug.ShouldBe("dev");
+        options.SecretPath.ShouldBe("/");
+        options.Url.ShouldBe("http://infisical01.infra.home.arpa:8888");
+        options.Recursive.ShouldBeFalse();
+        options.RefreshInterval.ShouldBe(TimeSpan.FromDays(1));
+    }
+
+    [Fact]
+    public void AddInfisical_DisabledFromConfiguration_DoesNotValidateOrChangeConfiguration()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        var configuration = new ConfigurationManager
+        {
+            ["Infisical:Enabled"] = "false"
+        };
+        configuration["Application:ExistingSetting"] = "preserved";
+        var initialSourceCount = configuration.Sources.Count;
+        var initialServiceCount = services.Count;
+
+        // Act
+        var returnedServices = services.AddInfisical(configuration);
+
+        // Assert
+        returnedServices.ShouldBeSameAs(services);
+        configuration.Sources.Count.ShouldBe(initialSourceCount);
+        services.Count.ShouldBe(initialServiceCount);
+        configuration["Application:ExistingSetting"].ShouldBe("preserved");
+    }
 
     [Fact]
     public void AddInfisical_Disabled_DoesNotValidateOrChangeConfiguration()
