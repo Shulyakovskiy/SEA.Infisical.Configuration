@@ -14,8 +14,7 @@ public static class InfisicalConfigurationExtensions
         IConfigurationManager configuration,
         Action<InfisicalConfigurationOptions>? configure = null)
     {
-        var options = new InfisicalConfigurationOptions();
-        configure?.Invoke(options);
+        var options = CreateOptions(configuration, configure);
 
         if (!options.Enabled)
         {
@@ -38,6 +37,19 @@ public static class InfisicalConfigurationExtensions
         services.AddHostedService<InfisicalConfigurationRefreshService>();
 
         return services;
+    }
+
+    internal static InfisicalConfigurationOptions CreateOptions(
+        IConfiguration configuration,
+        Action<InfisicalConfigurationOptions>? configure = null)
+    {
+        var options = new InfisicalConfigurationOptions();
+        configuration
+            .GetSection(InfisicalConfigurationOptions.ConfigurationSectionName)
+            .Bind(options);
+        configure?.Invoke(options);
+
+        return options;
     }
 }
 

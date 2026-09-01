@@ -8,7 +8,7 @@
 2. копирует их в `EnvironmentVariableTarget.Process`;
 3. выполняет обязательное периодическое обновление с повторным Universal Auth login.
 
-Библиотека не читает и не создаёт `.env`. Credentials должны быть установлены хостом до вызова `AddInfisical`: через CI/CD, Docker `environment`/`env_file`, Kubernetes Secret или локальный загрузчик `.env`. Копирование полученных секретов выполняется только в окружение текущего процесса приложения.
+Библиотека читает настройки из секции `Infisical` в `IConfiguration`; если значение в секции отсутствует, используется прежний fallback к переменной окружения `INFISICAL_*`. Делегат `configure` в `AddInfisical` применяется последним и может переопределить оба источника. Копирование полученных секретов выполняется только в окружение текущего процесса приложения.
 
 ```csharp
 builder.Services.AddInfisical(builder.Configuration);
@@ -22,6 +22,27 @@ public sealed class SomeService(IOptions<DemoOptions> options)
 ```
 
 `AddInfisical` нужно вызвать до `Configure<T>`, `BindConfiguration` и других регистраций, которые читают секретные настройки.
+
+## appsettings.json
+
+Помимо переменных окружения можно задать настройки в `appsettings.json`:
+
+```json
+{
+  "Infisical": {
+    "ClientId": "replace-with-machine-identity-client-id",
+    "ClientSecret": "replace-with-machine-identity-client-secret",
+    "ProjectId": "replace-with-project-id",
+    "EnvironmentSlug": "dev",
+    "SecretPath": "/",
+    "RefreshIntervalSeconds": 86400,
+    "Url": "http://infisical01.infra.home.arpa:8888",
+    "Recursive": false
+  }
+}
+```
+
+`EnvironmentSlug` остаётся обязательным параметром Infisical API. Не добавляйте рабочий `ClientSecret` в репозиторий: для production предпочтительнее передать его через secret store хоста или переменную окружения.
 
 Чтобы полностью отключить библиотеку для конкретного запуска, передайте `Enabled = false` при подключении:
 
